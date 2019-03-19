@@ -35,7 +35,7 @@ import (
 )
 
 // AggregateContainerStateGCInterval defines how often expired AggregateContainerStates are garbage collected.
-const AggregateContainerStateGCInterval = 1 * time.Hour
+const AggregateContainerStateGCInterval = 30 * time.Minute
 
 var (
 	checkpointsWriteTimeout = flag.Duration("checkpoints-timeout", time.Minute, `Timeout for writing checkpoints since the start of the recommender's main loop`)
@@ -228,8 +228,8 @@ func (c RecommenderFactory) Make() Recommender {
 		useCheckpoints:                c.UseCheckpoints,
 		vpaClient:                     c.VpaClient,
 		podResourceRecommender:        c.PodResourceRecommender,
-		lastAggregateContainerStateGC: time.Now(),
-		lastCheckpointGC:              time.Now(),
+		lastAggregateContainerStateGC: time.Unix(0, 0),
+		lastCheckpointGC:              time.Unix(0, 0),
 	}
 	klog.V(3).Infof("New Recommender created %+v", recommender)
 	return recommender
